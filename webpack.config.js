@@ -15,6 +15,11 @@ module.exports = {
   module: {
     rules: [
       {
+
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader'
+      },
+      {
         test: /\.css$/,
         use: [
           'vue-style-loader',
@@ -38,6 +43,14 @@ module.exports = {
         ],
       },
       {
+        test: /\.less$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'less-loader'
+        ],
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -54,6 +67,11 @@ module.exports = {
               'vue-style-loader',
               'css-loader',
               'sass-loader?indentedSyntax'
+            ],
+            'less': [
+              'vue-style-loader',
+              'css-loader',
+              'less-loader'
             ]
           }
           // other vue-loader options go here

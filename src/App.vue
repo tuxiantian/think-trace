@@ -10,7 +10,7 @@
         </li>
       </ul>
     </el-header>
-    <el-main style="margin-top:70px">
+    <el-main>
       <router-view></router-view>
     </el-main>
     <el-footer></el-footer>
@@ -25,11 +25,19 @@ export default {
 </script>
 
 <style>
+  body{
+    margin: 0px;
+  }
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
     text-align: center;
     line-height: 60px;
+  }
+  .el-footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
   }
   .el-header ul{
     list-style-type: none;

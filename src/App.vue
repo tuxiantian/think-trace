@@ -33,6 +33,7 @@ export default {
   }
   .el-header ul{
     list-style-type: none;
+    margin-top: 0px;
   }
   
   .el-aside {
@@ -46,7 +47,6 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
   }
   
   body > .el-container {

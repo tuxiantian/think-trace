@@ -9,6 +9,7 @@ import Markdown from '@/components/markdown';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -31,6 +32,13 @@ export default new Router({
     }, {
       path: '/markdown',
       name: 'Markdown',
-      component: Markdown
+      component: Markdown,
+      children: [
+        {
+          path:'/markdown/:id',
+          name: 'Markdown',
+          component: Markdown
+        }
+      ]
     }]
 });

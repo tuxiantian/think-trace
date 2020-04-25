@@ -17,10 +17,6 @@ import defaultOptions from './default-options'
 export default {
   name: 'MarkdownEditor',
   props: {
-    value: {
-      type: String,
-      default: ''
-    },
     id: {
       type: String,
       required: false,
@@ -65,11 +61,6 @@ export default {
     }
   },
   watch: {
-    value(newValue, preValue) {
-      if (newValue !== preValue && newValue !== this.editor.getValue()) {
-        this.editor.setValue(newValue)
-      }
-    },
     language(val) {
       this.destroyEditor()
       this.initEditor()
@@ -99,11 +90,8 @@ export default {
       this.editor.off('change')
       this.editor.remove()
     },
-    setHtml(value) {
-      this.editor.setHtml(value)
-    },
-    getHtml() {
-      return this.editor.getHtml()
+    getValue() {
+      return this.editor.getMarkdown()
     }
   }
 }

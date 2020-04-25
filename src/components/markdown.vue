@@ -1,19 +1,19 @@
 <template>
   <div class="components-container">
-
-    <div class="editor-container">
+    <el-input v-model="title" placeholder="请输入文章标题" clearable maxlength="100"></el-input>
+    <div class="editor-container" style="margin-top:10px">
       <markdown-editor ref="markdownEditor" v-model="content" :options="{hideModeSwitch:true,previewStyle:'tab'}" :language="language" height="300px" />
     </div>
 
-    <el-button style="margin-top:80px;" type="primary" icon="el-icon-document" @click="getHtml">
-      Get HTML
+    <el-button type="primary" icon="el-icon-document" @click="onSubmit">
+      Submit
     </el-button>
-    <div v-html="html" />
   </div>
 </template>
 
 <script>
 import MarkdownEditor from '@/components/MarkdownEditor'
+import { addArticle } from '../api/api.js'; 
 
 const content = ``
 export default {
@@ -21,8 +21,8 @@ export default {
   components: { MarkdownEditor },
   data() {
     return {
+      title:'',
       content: content,
-      html: '',
       languageTypeList: {
         'en': 'en_US',
         'zh': 'zh_CN',
@@ -36,9 +36,12 @@ export default {
     }
   },
   methods: {
-    getHtml() {
-      this.html = this.$refs.markdownEditor.getHtml()
-      console.log(this.html)
+    onSubmit() {
+      this.content = this.$refs.markdownEditor.getValue()
+      addArticle({
+          content:this.content,
+          title:this.title
+      });
     }
   }
 }

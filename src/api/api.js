@@ -32,7 +32,11 @@ export const addTodo = params => {
 
 export const deleteTodo = id => {
   return axios.get(`http://localhost:8085/todo/delete/${id}`).then(res => res.data);
-}
+};
+
+export const addArticle = params =>{
+  return axios.post(`http://localhost:8085/article/add`, params).then(res => res.data);
+};
 
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 

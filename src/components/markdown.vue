@@ -22,7 +22,7 @@ import { editArticle, getArticle } from "../api/api.js";
 
 const content = ``;
 export default {
-  name: "MarkdownDemo",
+  name: "Markdown",
   components: { MarkdownEditor },
   data() {
     return {

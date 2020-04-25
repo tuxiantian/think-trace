@@ -4,7 +4,7 @@ import Timeline from '@/components/Timeline/Timeline.vue'
 import Layouts from '@/components/layouts.vue'
 import todo from '@/components/todo';
 import Markdown from '@/components/markdown';
-
+import Viewer from '@/components/Viewer';
 
 Vue.use(Router);
 
@@ -32,13 +32,17 @@ export default new Router({
     }, {
       path: '/markdown',
       name: 'Markdown',
-      component: Markdown,
-      children: [
-        {
-          path:'/markdown/:id',
-          name: 'Markdown',
-          component: Markdown
-        }
-      ]
-    }]
+      component: Markdown
+    },
+    {
+      path:'/markdown/:id',
+      name: 'Markdown',
+      component: Markdown
+    },
+    {
+      path:'/markdown/view/:id',
+      name: 'Viewer',
+      component: Viewer
+    }
+  ]
 });

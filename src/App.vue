@@ -7,6 +7,7 @@
           <router-link to="/index">Timeline</router-link>
           <router-link to="/todo">todo</router-link>
           <router-link to="/markdown">markdown</router-link>
+          <router-link to="/markdown/view/1">markdown view</router-link>
         </li>
       </ul>
     </el-header>

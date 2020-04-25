@@ -58,7 +58,7 @@ export default {
     },
     addTodoList() { // 点击新增按钮时候
       // 调用vuex actions.js 里面的 getTodo函数
-      addTodo({}).then(data => {
+      addTodo({title:'newList'}).then(data => {
         this.$store.dispatch('getTodo').then(() => {
           this.$nextTick(() => {
             setTimeout(() => {

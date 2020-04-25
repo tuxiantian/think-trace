@@ -1,5 +1,5 @@
 <template>
-  <div class="page lists-show" v-show="!todo.isDelete">
+  <div class="page lists-show">
     <!-- 头部模块 -->
     <nav>
       <!-- 当用户浏览车窗口尺寸小于40em时候，显示手机端的菜单图标 -->
@@ -32,14 +32,14 @@
         <div class="options-web">
           <a class=" nav-item" @click="onlock">
             <!-- cicon-lock锁定的图标
-                                                    icon-unlock：非锁定的图标
-                                                    -->
+             icon-unlock：非锁定的图标
+             -->
             <span class="icon-lock" v-if="todo.locked"></span>
             <span class="icon-unlock" v-else>
             </span>
           </a>
           <a class="nav-item">
-            <span class="icon-trash" @click="onDelete">
+            <span class="icon-trash" @click="onDelete(todo.id)">
             </span>
           </a>
         </div>
@@ -62,7 +62,8 @@
 <script>
 
 import item from './item';
-import { addRecord, getTodo, editTodo } from '../api/api';
+import { addRecord, getTodo, editTodo ,deleteTodo} from '../api/api';
+
 export default {
   data() {
     return {
@@ -95,15 +96,14 @@ export default {
       const ID = this.$route.params.id;
       var _self=this;
       getTodo({ id: ID }).then(res => {
-        let { id, title, count, isDelete, locked, todoItems
+        let { id, title, count, locked, todoItems
         } = res.data;
         _self.items=todoItems;
         _self.todo = {
           id: id,
           title: title,
           count: count,
-          locked: locked,
-          isDelete: isDelete
+          locked: locked
         };
       });
     },
@@ -117,10 +117,7 @@ export default {
     },
     updateTodo() {
       let _this = this;
-      editTodo({
-        todo: this.todo
-      }).then(data => {
-        // _this.init();
+      editTodo(this.todo).then(data => {
         _this.$store.dispatch('getTodo');
       });
     },
@@ -128,9 +125,13 @@ export default {
       this.updateTodo();
       this.isUpdate = false;
     },
-    onDelete() {
-      this.todo.isDelete = true;
-      this.updateTodo();
+    onDelete(id) {
+      let _this = this;
+      deleteTodo(id).then(
+        data => {
+          _this.$store.dispatch('getTodo');
+        }
+      );
     },
     onlock() {
       this.todo.locked = !this.todo.locked;

@@ -88,6 +88,9 @@ export default {
   overflow: auto;
   padding: 10px 5px;
 }
+.two-dimension-table div[contenteditable="true"]:focus {
+    outline:none;
+}
 .second-quadrant {
   border-right: 1px solid black;
   border-bottom: 1px solid black;

@@ -8,6 +8,8 @@
           <router-link to="/todo">todo</router-link>
           <router-link to="/markdown">markdown</router-link>
           <router-link to="/markdown/view/1">markdown view</router-link>
+          <router-link to="/TwoDimensionTable">TwoDimensionTable</router-link>
+          
         </li>
       </ul>
     </el-header>
@@ -20,15 +22,14 @@
 </template>
 
 <script>
+import 'normalize.css/normalize.css'// A modern alternative to CSS resets
+
 export default {
   name: "app"
 };
 </script>
 
 <style>
-  body{
-    margin: 0px;
-  }
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -36,8 +37,6 @@ export default {
     line-height: 60px;
   }
   .el-footer {
-    position: absolute;
-    bottom: 0px;
     width: 100%;
   }
   .el-header ul{
@@ -56,6 +55,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
+    min-height: calc(100vh - 120px);
   }
   
   body > .el-container {

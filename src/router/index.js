@@ -5,6 +5,7 @@ import Layouts from '@/components/layouts.vue'
 import todo from '@/components/todo';
 import Markdown from '@/components/markdown';
 import Viewer from '@/components/Viewer';
+import TwoDimensionTable from '@/components/TwoDimensionTable';
 
 Vue.use(Router);
 
@@ -43,6 +44,11 @@ export default new Router({
       path:'/markdown/view/:id',
       name: 'Viewer',
       component: Viewer
+    },
+    {
+      path:'/TwoDimensionTable',
+      name: 'TwoDimensionTable',
+      component: TwoDimensionTable
     }
   ]
 });

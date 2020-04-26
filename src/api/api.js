@@ -41,6 +41,15 @@ export const editArticle = params =>{
 export const getArticle = id =>{
   return axios.get(`http://localhost:8085/article/get/${id}`).then(res => res.data);
 };
+
+export const getTwoDimensionTable = id =>{
+  return axios.get(`http://localhost:8085/twoDimensionTable/get/${id}`).then(res => res.data);
+};
+
+export const editTwoDimensionTable = params => {
+  return axios.post(`http://localhost:8085/twoDimensionTable/edit`, params).then(res => res.data);
+};
+
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
 // export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };

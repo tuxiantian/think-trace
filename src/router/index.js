@@ -46,7 +46,12 @@ export default new Router({
       component: Viewer
     },
     {
-      path:'/TwoDimensionTable',
+      path:'/twoDimensionTable',
+      name: 'TwoDimensionTable',
+      component: TwoDimensionTable
+    },
+    {
+      path:'/twoDimensionTable/:id',
       name: 'TwoDimensionTable',
       component: TwoDimensionTable
     }

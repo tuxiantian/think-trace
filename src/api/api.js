@@ -50,6 +50,14 @@ export const editTwoDimensionTable = params => {
   return axios.post(`http://localhost:8085/twoDimensionTable/edit`, params).then(res => res.data);
 };
 
+export const getFactOpinionCard = id =>{
+  return axios.get(`http://localhost:8085/factOpinionCard/get/${id}`).then(res => res.data);
+};
+
+export const editFactOpinionCard = params => {
+  return axios.post(`http://localhost:8085/factOpinionCard/edit`, params).then(res => res.data);
+};
+
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
 // export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };

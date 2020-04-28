@@ -6,6 +6,7 @@ import todo from '@/components/todo';
 import Markdown from '@/components/markdown';
 import Viewer from '@/components/Viewer';
 import TwoDimensionTable from '@/components/TwoDimensionTable';
+import FactOpinionCard from '@/components/FactOpinionCard';
 
 Vue.use(Router);
 
@@ -54,6 +55,16 @@ export default new Router({
       path:'/twoDimensionTable/:id',
       name: 'TwoDimensionTable',
       component: TwoDimensionTable
+    },
+    {
+      path:'/factOpinionCard',
+      name: 'FactOpinionCard',
+      component: FactOpinionCard
+    },
+    {
+      path:'/factOpinionCard/:id',
+      name: 'FactOpinionCard',
+      component: FactOpinionCard
     }
   ]
 });

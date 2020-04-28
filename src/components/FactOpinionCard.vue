@@ -51,6 +51,7 @@ export default {
 .card {
   border: 1px solid black;
   width: 410px;
+  margin: 0 auto;
 }
 .card div[contenteditable="true"] {
   width: 400px;

@@ -58,6 +58,15 @@ export const editFactOpinionCard = params => {
   return axios.post(`http://localhost:8085/factOpinionCard/edit`, params).then(res => res.data);
 };
 
+export const getWhyHowWhatCard = id =>{
+  return axios.get(`http://localhost:8085/whyHowWhatCard/get/${id}`).then(res => res.data);
+};
+
+export const editWhyHowWhatCard = params => {
+  return axios.post(`http://localhost:8085/whyHowWhatCard/edit`, params).then(res => res.data);
+};
+
+
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
 // export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };

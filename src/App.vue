@@ -10,6 +10,7 @@
           <router-link to="/markdown/view/1">markdown view</router-link>
           <router-link to="/twoDimensionTable">TwoDimensionTable</router-link>
           <router-link to="/factOpinionCard">FactOpinionCard</router-link>
+          <router-link to="/whyHowWhatCard">WhyHowWhatCard</router-link>
         </li>
       </ul>
     </el-header>

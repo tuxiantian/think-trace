@@ -57,7 +57,7 @@ export default {
   display: flex;
   border: 1px solid black;
   width: 630px;
-  height: 250px;
+  height: 450px;
   margin: 0 auto;
 }
 .why-lable,
@@ -70,7 +70,7 @@ export default {
 
 .why-how-what div[contenteditable="true"] {
   width: 200px;
-  height: 200px;
+  height: 400px;
   overflow: auto;
   padding: 10px 5px;
 }

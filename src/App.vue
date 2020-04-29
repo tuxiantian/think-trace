@@ -17,7 +17,7 @@
     <el-main>
       <router-view></router-view>
     </el-main>
-    <el-footer></el-footer>
+    <el-footer>记录不只是记录，还是书写人生</el-footer>
   </el-container>
   </div>
 </template>

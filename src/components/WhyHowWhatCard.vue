@@ -2,12 +2,12 @@
   <div>
     <div class="why-how-what">
       <div class="why">
-        <div class="why-lable">Why</div>
+        <div class="why-lable">Why <img src="../assets/jt.png"/></div>
         <div contenteditable="true" id="why"></div>
       </div>
 
       <div class="how">
-        <div class="how-lable">How</div>
+        <div class="how-lable">How <img src="../assets/jt.png"/></div>
         <div contenteditable="true" id="how"></div>
       </div>
 
@@ -66,6 +66,18 @@ export default {
   height: 30px;
   line-height: 30px;
   border-bottom: 1px solid black;
+}
+.why{
+  position: relative;
+}
+.how{
+  position: relative;
+}
+.why-how-what img{
+  position: absolute;
+  top: 0px;
+  right: 0;
+  width: 30px;
 }
 
 .why-how-what div[contenteditable="true"] {

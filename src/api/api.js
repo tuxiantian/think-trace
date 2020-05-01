@@ -70,6 +70,10 @@ export const findPreferenceRank = id => {
   return axios.get(`http://localhost:8085/preferenceRank/find/${id}`).then(res => res.data);
 }
 
+export const getPreference = id => {
+  return axios.get(`http://localhost:8085/preference/get/${id}`).then(res => res.data);
+}
+
 export const answerPreferenceRank = params => {
   return axios.post(`http://localhost:8085/preferenceRank/answer`, params).then(res => res.data);
 }

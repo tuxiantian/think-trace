@@ -9,6 +9,8 @@ import TwoDimensionTable from '@/components/TwoDimensionTable';
 import FactOpinionCard from '@/components/FactOpinionCard';
 import WhyHowWhatCard from '@/components/WhyHowWhatCard';
 import PreferenceRank from '@/components/PreferenceRank';
+import PreferenceRankView from '@/components/PreferenceRankView';
+
 
 Vue.use(Router);
 
@@ -82,7 +84,13 @@ export default new Router({
       path:'/preferenceRank/:id',
       name: 'PreferenceRank',
       component: PreferenceRank
+    },
+    {
+      path:'/preferenceRankView/:id',
+      name: 'PreferenceRankView',
+      component: PreferenceRankView
     }
+    
     
   ]
 });

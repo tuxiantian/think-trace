@@ -79,7 +79,7 @@ export default new Router({
       component: WhyHowWhatCard
     },
     {
-      path:'/preferenceRank',
+      path:'/preferenceRank/:id',
       name: 'PreferenceRank',
       component: PreferenceRank
     }

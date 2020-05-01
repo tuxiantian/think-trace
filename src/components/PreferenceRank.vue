@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div v-for="(item) in questionList" v-bind:key="item.id">
-      <p>{{item.question}}</p>
+    <div v-for="(item,index) in questionList" v-bind:key="item.preferenceRankId">
+      <p>{{index+1}}. {{item.question}}</p>
       <el-radio v-model="item.answer" :label="item.preference1">greater</el-radio>
       <el-radio v-model="item.answer" :label="item.preference2">less</el-radio>
     </div>
 
-    <el-button @click="getRank">Get</el-button>
+    <el-button @click="onSubmit" style="margin-top:30px">Submit</el-button>
   </div>
 </template>
 
 <script>
+import { findPreferenceRank,answerPreferenceRank} from '../api/api';
+
 export default {
   name: "PreferenceRank",
   data() {
@@ -32,14 +34,22 @@ export default {
     };
   },
   created() {
-    this.questionList = this.questionList.map(item => {
-      return { ...item, answer: `${item.id}` };
-    });
+    const ID = this.$route.params.id;
+    findPreferenceRank(ID).then(data => {
+        this.questionList = data;
+    })
+    // this.questionList = this.questionList.map(item => {
+    //   return { ...item, answer: `${item.id}` };
+    // });
     console.log(this.questionList);
   },
   methods: {
-    getRank() {
-      console.log(this.questionList);
+    onSubmit() {
+      let answerList=this.questionList.map(item=>{
+        return {preferenceRankId:item.preferenceRankId,answer:item.answer,groupId:item.groupId}
+      });
+      console.log(answerList);
+      answerPreferenceRank(answerList);
     }
   }
 };

@@ -66,6 +66,13 @@ export const editWhyHowWhatCard = params => {
   return axios.post(`http://localhost:8085/whyHowWhatCard/edit`, params).then(res => res.data);
 };
 
+export const findPreferenceRank = id => {
+  return axios.get(`http://localhost:8085/preferenceRank/find/${id}`).then(res => res.data);
+}
+
+export const answerPreferenceRank = params => {
+  return axios.post(`http://localhost:8085/preferenceRank/answer`, params).then(res => res.data);
+}
 
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 

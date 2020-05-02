@@ -11,6 +11,7 @@ import WhyHowWhatCard from '@/components/WhyHowWhatCard';
 import PreferenceRank from '@/components/PreferenceRank';
 import PreferenceRankView from '@/components/PreferenceRankView';
 import Preference from '@/components/Preference';
+import Step from '@/components/Step';
 
 
 Vue.use(Router);
@@ -100,6 +101,11 @@ export default new Router({
       path:'/preference/get/:id',
       name: 'Preference',
       component: Preference
+    },
+    {
+      path:'/step',
+      name: 'Step',
+      component: Step
     }
     
     

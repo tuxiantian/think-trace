@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div class="preferenceRank">
+    <el-steps :space="200" :active="2" finish-status="success">
+      <el-step title="add preference"></el-step>
+      <el-step title="choice preference"></el-step>
+      <el-step title="preference rank"></el-step>
+    </el-steps>
+
     <div v-for="(item,index) in questionList" v-bind:key="item.preferenceRankId">
       <p>{{index+1}}. {{item.question}}</p>
       <el-radio v-model="item.answer" :label="item.preference1">greater</el-radio>
@@ -17,6 +23,7 @@ export default {
   name: "PreferenceRank",
   data() {
     return {
+      active: 0,
       groupId:null,
       questionList: [
         {
@@ -58,3 +65,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.preferenceRank{
+  margin: 0 auto;
+  width: 600px;
+}
+</style>

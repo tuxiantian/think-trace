@@ -1,30 +1,32 @@
 <template>
   <div class="preferenceRank">
-    <el-steps :space="200" :active="2" finish-status="success">
+    <el-steps :space="200" :active="active" finish-status="success">
       <el-step title="add preference"></el-step>
       <el-step title="choice preference"></el-step>
       <el-step title="preference rank"></el-step>
     </el-steps>
 
-    <div v-for="(item,index) in questionList" v-bind:key="item.preferenceRankId">
-      <p>{{index+1}}. {{item.question}}</p>
-      <el-radio v-model="item.answer" :label="item.preference1">greater</el-radio>
-      <el-radio v-model="item.answer" :label="item.preference2">less</el-radio>
-    </div>
+    <div class="preferenceRankContainer">
+      <div v-for="(item,index) in questionList" v-bind:key="item.preferenceRankId">
+        <p>{{index+1}}. {{item.question}}</p>
+        <el-radio v-model="item.answer" :label="item.preference1">greater</el-radio>
+        <el-radio v-model="item.answer" :label="item.preference2">less</el-radio>
+      </div>
 
-    <el-button @click="onSubmit" style="margin-top:30px">Submit</el-button>
+      <el-button @click="onSubmit" style="margin-top:30px" type="primary">Submit</el-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { findPreferenceRank,answerPreferenceRank} from '../api/api';
+import { findPreferenceRank, answerPreferenceRank } from "../api/api";
 
 export default {
   name: "PreferenceRank",
   data() {
     return {
-      active: 0,
-      groupId:null,
+      active: 2,
+      groupId: null,
       questionList: [
         {
           id: 11,
@@ -45,8 +47,9 @@ export default {
     const ID = this.$route.params.id;
     this.groupId = ID;
     findPreferenceRank(ID).then(data => {
-        this.questionList = data;
-    })
+      this.questionList = data.data.preferenceRanks;
+      this.active =  data.data.stepActive;
+    });
     // this.questionList = this.questionList.map(item => {
     //   return { ...item, answer: `${item.id}` };
     // });
@@ -54,12 +57,16 @@ export default {
   },
   methods: {
     onSubmit() {
-      let answerList=this.questionList.map(item=>{
-        return {preferenceRankId:item.preferenceRankId,answer:item.answer,groupId:item.groupId}
+      let answerList = this.questionList.map(item => {
+        return {
+          preferenceRankId: item.preferenceRankId,
+          answer: item.answer,
+          groupId: item.groupId
+        };
       });
       console.log(answerList);
-      answerPreferenceRank(answerList).then(data=>{
-        this.$router.push(`/preferenceRankView/`+this.groupId);
+      answerPreferenceRank(answerList).then(data => {
+        this.$router.push(`/preferenceRankView/` + this.groupId);
       });
     }
   }
@@ -67,8 +74,11 @@ export default {
 </script>
 
 <style scoped>
-.preferenceRank{
+.preferenceRank {
   margin: 0 auto;
   width: 600px;
+}
+.preferenceRankContainer{
+  margin-top: 30px;
 }
 </style>

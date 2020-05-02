@@ -1,6 +1,6 @@
 <template>
   <div class="preferenceRankView">
-    <el-steps :space="200" :active="3" finish-status="success">
+    <el-steps :space="200" :active="active" finish-status="success">
       <el-step title="add preference"></el-step>
       <el-step title="choice preference"></el-step>
       <el-step title="preference rank"></el-step>
@@ -17,20 +17,21 @@
 </template>
 
 <script>
-import { getPreference } from "../api/api.js";
+import { getSortedPreference } from "../api/api.js";
 
 export default {
   name: "PreferenceRankView",
   data() {
     return {
-      active: 0,
+      active: 3,
       preferenceList: []
     };
   },
   created() {
     this.id = this.$route.params.id;
-    getPreference(this.id).then(data => {
-      this.preferenceList = data;
+    getSortedPreference(this.id).then(data => {
+      this.preferenceList = data.data.preferenceList;
+      this.active = data.data.stepActive;
     });
   }
 };

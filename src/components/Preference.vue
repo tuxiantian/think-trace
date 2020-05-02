@@ -1,25 +1,24 @@
 <template>
   <div class="preference">
-    <el-steps :space="200" :active="1" finish-status="success">
+    <el-steps :space="200" :active="active" finish-status="success">
       <el-step title="add preference"></el-step>
       <el-step title="choice preference"></el-step>
       <el-step title="preference rank"></el-step>
     </el-steps>
 
-    <div>
+    <div class="preference-container">
       <div class="preference-header">
         <el-input type="text" v-model="preferenceText" clearable />
-        <el-button @click="addNewPreference" style="margin-left:20px">添加</el-button>
+        <el-button @click="addNewPreference" style="margin-left:20px" type="primary">添加</el-button>
       </div>
       <ul>
         <li v-for="preference in preferenceList" :key="preference.id">
           <span v-text="preference.preferenceText"></span>
-          <el-button @click="deletePreference(preference.id)" size="small">删除</el-button>
+          <el-button @click="deletePreference(preference.id)" size="small" type="primary">删除</el-button>
         </li>
       </ul>
       <div class="footer">
-        <el-button @click="insertPreferenceRank(groupId)" :disabled="preferenceList.length==0">完成</el-button>
-        <el-button @click="nextStep()">Next</el-button>
+        <el-button @click="insertPreferenceRank(groupId)" :disabled="preferenceList.length==0" type="primary">完成</el-button>
       </div>
     </div>
   </div>
@@ -48,7 +47,8 @@ export default {
     if (ID != undefined) {
       this.groupId = ID;
       getPreference(ID).then(data => {
-        this.preferenceList = data;
+        this.preferenceList = data.data.preferenceList;
+        this.active = data.data.stepActive;
       });
     }
   },
@@ -77,12 +77,6 @@ export default {
       insertPreferenceRank(groupId).then(data => {
         this.$router.push(`/preferenceRank/` + this.groupId);
       });
-    },
-    nextStep(){
-        this.active++;
-        console.log(this.active)
-        // if (this.active++ > 2) this.active = 0;
-        // console.log(this.active)
     }
   }
 };
@@ -93,6 +87,9 @@ export default {
   width: 600px;
   height: auto;
   margin: 0 auto;
+}
+.preference-container{
+    margin-top: 30px;
 }
 .preference li {
   text-align: left;

@@ -75,10 +75,12 @@ export const insertPreferenceRank = id => {
 }
 
 export const getPreference = id => {
-  return axios.get(`http://localhost:8085/preference/get/${id}`).then(res => res.data);
+  return axios.get(`http://localhost:8085/preference/${id}`).then(res => res.data);
 }
 
-
+export const getSortedPreference = id => {
+  return axios.get(`http://localhost:8085/preference/sorted/${id}`).then(res => res.data);
+}
 
 export const deletePreference = id => {
   return axios.get(`http://localhost:8085/preference/delete/${id}`).then(res => res.data);

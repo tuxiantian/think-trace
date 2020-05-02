@@ -98,7 +98,7 @@ export default new Router({
       component: Preference
     },
     {
-      path:'/preference/get/:id',
+      path:'/preference/:id',
       name: 'Preference',
       component: Preference
     },

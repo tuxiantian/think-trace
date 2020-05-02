@@ -11,6 +11,7 @@
           <router-link to="/twoDimensionTable">TwoDimensionTable</router-link>
           <router-link to="/factOpinionCard">FactOpinionCard</router-link>
           <router-link to="/whyHowWhatCard">WhyHowWhatCard</router-link>
+          <router-link to="/preference">Preference</router-link>
           <router-link to="/preferenceRank/1588332041239">PreferenceRank</router-link>
         </li>
       </ul>

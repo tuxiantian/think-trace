@@ -10,6 +10,7 @@ import FactOpinionCard from '@/components/FactOpinionCard';
 import WhyHowWhatCard from '@/components/WhyHowWhatCard';
 import PreferenceRank from '@/components/PreferenceRank';
 import PreferenceRankView from '@/components/PreferenceRankView';
+import Preference from '@/components/Preference';
 
 
 Vue.use(Router);
@@ -89,6 +90,16 @@ export default new Router({
       path:'/preferenceRankView/:id',
       name: 'PreferenceRankView',
       component: PreferenceRankView
+    },
+    {
+      path:'/preference',
+      name: 'Preference',
+      component: Preference
+    },
+    {
+      path:'/preference/get/:id',
+      name: 'Preference',
+      component: Preference
     }
     
     

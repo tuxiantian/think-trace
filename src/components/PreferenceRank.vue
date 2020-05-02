@@ -17,6 +17,7 @@ export default {
   name: "PreferenceRank",
   data() {
     return {
+      groupId:null,
       questionList: [
         {
           id: 11,
@@ -35,6 +36,7 @@ export default {
   },
   created() {
     const ID = this.$route.params.id;
+    this.groupId = ID;
     findPreferenceRank(ID).then(data => {
         this.questionList = data;
     })
@@ -49,7 +51,9 @@ export default {
         return {preferenceRankId:item.preferenceRankId,answer:item.answer,groupId:item.groupId}
       });
       console.log(answerList);
-      answerPreferenceRank(answerList);
+      answerPreferenceRank(answerList).then(data=>{
+        this.$router.push(`/preferenceRankView/`+this.groupId);
+      });
     }
   }
 };

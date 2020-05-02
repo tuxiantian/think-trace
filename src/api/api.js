@@ -70,8 +70,22 @@ export const findPreferenceRank = id => {
   return axios.get(`http://localhost:8085/preferenceRank/find/${id}`).then(res => res.data);
 }
 
+export const insertPreferenceRank = id => {
+  return axios.get(`http://localhost:8085/preferenceRank/insert/${id}`).then(res => res.data);
+}
+
 export const getPreference = id => {
   return axios.get(`http://localhost:8085/preference/get/${id}`).then(res => res.data);
+}
+
+
+
+export const deletePreference = id => {
+  return axios.get(`http://localhost:8085/preference/delete/${id}`).then(res => res.data);
+}
+
+export const addPreference = params => {
+  return axios.post(`http://localhost:8085/preference/add`,params).then(res => res.data);
 }
 
 export const answerPreferenceRank = params => {

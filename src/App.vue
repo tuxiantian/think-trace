@@ -6,7 +6,7 @@
         <li>
           <router-link to="/index">Timeline</router-link>
           <router-link to="/todo">todo</router-link>
-          <router-link to="/markdown">markdown</router-link>
+          <router-link to="/article">Article</router-link>
           <router-link to="/twoDimensionTable">TwoDimensionTable</router-link>
           <router-link to="/factOpinionCard">FactOpinionCard</router-link>
           <router-link to="/whyHowWhatCard">WhyHowWhatCard</router-link>

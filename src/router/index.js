@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router';
 import Timeline from '@/components/Timeline/Timeline.vue'
 import Todo from '@/components/Todo';
-import Markdown from '@/components/markdown';
+import Article from '@/components/Article';
 import Viewer from '@/components/Viewer';
 import TwoDimensionTable from '@/components/TwoDimensionTable';
 import FactOpinionCard from '@/components/FactOpinionCard';
@@ -34,14 +34,14 @@ export default new Router({
       name: 'Timeline',
       component: Timeline
     }, {
-      path: '/markdown',
-      name: 'Markdown',
-      component: Markdown
+      path: '/article',
+      name: 'Article',
+      component: Article
     },
     {
-      path:'/markdown/:id',
-      name: 'MarkdownView',
-      component: Markdown
+      path:'/article/:id',
+      name: 'ArticleView',
+      component: Article
     },
     {
       path:'/markdown/view/:id',

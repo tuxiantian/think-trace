@@ -5,7 +5,7 @@
         class="timeline-item"
         :style="itemStyle"
         v-for="item in items"
-        v-bind:key="item.timelineId"
+        v-bind:key="item.createDate"
       >
         <div class="tag">{{item.createDate}}</div>
         <template v-if="item.active">
@@ -13,16 +13,46 @@
             class="timeline-circle"
             style="border-color: #9dd8e0;background-color:#9dd8e0"
             ref="others"
-          >
-            <slot name="others" />
-          </div>
+          ></div>
         </template>
         <template v-else>
-          <div class="timeline-circle" ref="others">
-            <slot name="others" />
-          </div>
+          <div class="timeline-circle" ref="others"></div>
         </template>
-        <router-link :to="'/todo/'+item.itemId">{{item.cardType}}</router-link>
+        <ul class="one-day">
+          <li v-for="timelineItem in item.timelineItems" v-bind:key="timelineItem.timelineId">
+            <template v-if="timelineItem.cardType=='todoList'">
+              <router-link
+                :to="'/todo/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+            <template v-else-if="timelineItem.cardType=='factOpinion'">
+              <router-link
+                :to="'/factOpinionCard/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+            <template v-else-if="timelineItem.cardType=='whyHowWhat'">
+              <router-link
+                :to="'/whyHowWhatCard/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+            <template v-else-if="timelineItem.cardType=='twoDimensionTable'">
+              <router-link
+                :to="'/twoDimensionTable/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+            <template v-else-if="timelineItem.cardType=='preferenceRank'">
+              <router-link
+                :to="'/preferenceRankView/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+            <template v-else-if="timelineItem.cardType=='article'">
+              <router-link
+                :to="'/markdown/view/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
+          </li>
+        </ul>
+
         <slot />
       </li>
     </ul>
@@ -81,11 +111,7 @@ export default {
           width: "30px"
         }
       },
-      items: [
-        { tag: "2020-04-10", active: false, content: "go swimming" },
-        { tag: "2020-04-09", active: true, content: "go to work" },
-        { tag: "2020-04-08", active: false, content: "go shopping" }
-      ]
+      items: []
     };
   },
 
@@ -93,22 +119,11 @@ export default {
     const timeline = this.$refs.timeline;
     timeline.style.setProperty("--timelineTheme", this.timelineTheme);
     timeline.style.setProperty("--timelineBg", this.timelineBg);
-    this.slotOthers = !!this.$refs.others.innerHTML;
   },
   created() {
-    let now = formatDate(new Date(), "yyyy-MM-dd");
     listTimelineItem({}).then(data => {
       this.items = data;
-      this.items = this.items.map(item => {
-        return {
-          ...item,
-          createDate: item.createTime.split("T")[0],
-          active: now == item.createTime.split("T")[0]
-        };
-      });
-
       console.log(this.items);
-      console.log(formatDate(new Date(), "yyyy-MM-dd"));
     });
   },
   computed: {
@@ -215,5 +230,12 @@ export default {
   text-align: center;
   border: none;
   background-color: var(--timelineBg);
+}
+.one-day{
+  list-style: none;
+}
+.one-day li{
+  line-height: 30px;
+  height: 30px;
 }
 </style>

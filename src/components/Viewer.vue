@@ -1,5 +1,9 @@
 <template>
+<div class="article">
+  <h1>{{title}}</h1>
   <div id="viewer"></div>
+</div>
+  
 </template>
 
 <script>
@@ -31,3 +35,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.article{
+  width: 800px;
+  margin: 0 auto;
+}
+h1{
+  text-align: center;
+}
+</style>

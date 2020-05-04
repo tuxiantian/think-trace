@@ -16,7 +16,7 @@
       </span>
     </div>
 
-    <el-button @click="onSubmit" style="margin-top:20px">Submit</el-button>
+    <el-button @click="onSubmit" type="primary" style="margin-top:20px">Submit</el-button>
   </div>
 </template>
 
@@ -45,11 +45,20 @@ export default {
   methods: {
     onSubmit() {
       editTwoDimensionTable({
-          id:this.id,
-          second:document.getElementById("second").innerText,
-          first:document.getElementById("first").innerText,
-          third:document.getElementById("third").innerText,
-          forth:document.getElementById("forth").innerText
+        id: this.id,
+        second: document.getElementById("second").innerText,
+        first: document.getElementById("first").innerText,
+        third: document.getElementById("third").innerText,
+        forth: document.getElementById("forth").innerText
+      }).then(res => {
+        if (res.code == 200) {
+          this.$message({
+            message: res.message,
+            type: "success"
+          });
+        } else {
+          this.$message.error(res.message);
+        }
       });
     }
   }
@@ -89,7 +98,7 @@ export default {
   padding: 10px 5px;
 }
 .two-dimension-table div[contenteditable="true"]:focus {
-    outline:none;
+  outline: none;
 }
 .second-quadrant {
   border-right: 1px solid black;

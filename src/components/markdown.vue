@@ -54,6 +54,15 @@ export default {
         id: this.id,
         content: this.content,
         title: this.title
+      }).then(res => {
+        if (res.code == 200) {
+          this.$message({
+            message: res.message,
+            type: "success"
+          });
+        } else {
+          this.$message.error(res.message);
+        }
       });
     },
     getDetail(id) {

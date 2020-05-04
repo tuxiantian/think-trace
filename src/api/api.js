@@ -9,10 +9,8 @@ export const getTodoList = params => {
   });
 };
 
-export const getTodo = params => {
-  return axios.get(`http://localhost:8085/todo/listId`, {
-    params: params
-  });
+export const getTodo = id => {
+  return axios.get(`http://localhost:8085/todo/${id}`);
 };
 
 export const addRecord = params => {
@@ -92,6 +90,10 @@ export const addPreference = params => {
 
 export const answerPreferenceRank = params => {
   return axios.post(`http://localhost:8085/preferenceRank/answer`, params).then(res => res.data);
+}
+
+export const listTimelineItem = params => {
+  return axios.get(`http://localhost:8085/timelineItem/list`,params).then(res => res.data);
 }
 
 // export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };

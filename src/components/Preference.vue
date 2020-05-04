@@ -18,7 +18,7 @@
         </li>
       </ul>
       <div class="footer">
-        <el-button @click="insertPreferenceRank(groupId)" :disabled="preferenceList.length==0" type="primary">完成</el-button>
+        <el-button @click="insertPreferenceRank(groupId)" :disabled="disabled" type="primary">完成</el-button>
       </div>
     </div>
   </div>
@@ -41,6 +41,11 @@ export default {
       preferenceText: "",
       preferenceList: []
     };
+  },
+  computed:{
+      disabled:function(){
+          return this.preferenceList.length==0 || this.active==3
+      }
   },
   created() {
     const ID = this.$route.params.id;

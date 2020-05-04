@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router';
 import Timeline from '@/components/Timeline/Timeline.vue'
-import Layouts from '@/components/layouts.vue'
-import todo from '@/components/todo';
+import Todo from '@/components/Todo';
 import Markdown from '@/components/markdown';
 import Viewer from '@/components/Viewer';
 import TwoDimensionTable from '@/components/TwoDimensionTable';
@@ -11,7 +10,6 @@ import WhyHowWhatCard from '@/components/WhyHowWhatCard';
 import PreferenceRank from '@/components/PreferenceRank';
 import PreferenceRankView from '@/components/PreferenceRankView';
 import Preference from '@/components/Preference';
-import Step from '@/components/Step';
 
 
 Vue.use(Router);
@@ -23,17 +21,15 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Timeline
-    },
-    {
-      path: '/todo',
-      name: 'todo',
-      component: Layouts,
-      children: [{
-        path: '/todo/:id',
-        name: 'todo',
-        component: todo
-      }]
     }, {
+      path: '/todo',
+        name: 'todo',
+        component: Todo
+    }, {
+      path: '/todo/:id',
+        name: 'todoView',
+        component: Todo
+    },{
       path: '/index',
       name: 'Timeline',
       component: Timeline
@@ -44,7 +40,7 @@ export default new Router({
     },
     {
       path:'/markdown/:id',
-      name: 'Markdown',
+      name: 'MarkdownView',
       component: Markdown
     },
     {
@@ -59,7 +55,7 @@ export default new Router({
     },
     {
       path:'/twoDimensionTable/:id',
-      name: 'TwoDimensionTable',
+      name: 'TwoDimensionTableView',
       component: TwoDimensionTable
     },
     {
@@ -69,7 +65,7 @@ export default new Router({
     },
     {
       path:'/factOpinionCard/:id',
-      name: 'FactOpinionCard',
+      name: 'FactOpinionCardView',
       component: FactOpinionCard
     },
     {
@@ -79,7 +75,7 @@ export default new Router({
     },
     {
       path:'/whyHowWhatCard/:id',
-      name: 'WhyHowWhatCard',
+      name: 'WhyHowWhatCardView',
       component: WhyHowWhatCard
     },
     {
@@ -99,15 +95,9 @@ export default new Router({
     },
     {
       path:'/preference/:id',
-      name: 'Preference',
+      name: 'PreferenceView',
       component: Preference
-    },
-    {
-      path:'/step',
-      name: 'Step',
-      component: Step
     }
-    
     
   ]
 });

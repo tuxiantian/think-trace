@@ -1,148 +1,581 @@
 <template>
-  <div class="page lists-show">
-    <!-- 头部模块 -->
-    <nav>
-      <!-- 当用户浏览车窗口尺寸小于40em时候，显示手机端的菜单图标 -->
-      <div class="form list-edit-form" v-show="isUpdate">
-        <!-- 当用户点击标题进入修改状态，就显示当前内容可以修改 -->
-        <input type="text" v-model="todo.title" @keyup.enter="updateTitle" :disabled="todo.locked">
-        <div class="nav-group right">
-          <a class="nav-item" @click="isUpdate = false">
-            <span class="icon-close">
-            </span>
-          </a>
-        </div>
-      </div>
-      <div class="nav-group" @click="$store.dispatch('updateMenu')" v-show="!isUpdate">
-        <!-- 在菜单的图标下面添加updateMenu时间，他可以直接调用vuex actions.js里面的updateMenu方法 -->
-        <a class="nav-item">
-          <span class="icon-list-unordered">
-          </span>
-        </a>
-      </div>
-      <!-- 显示标题和数字模块 -->
-      <h1 class="title-page" v-show="!isUpdate" @click="isUpdate = true">
-        <span class="title-wrapper">{{todo.title}}</span>
-        <!-- title:标题 绑定标题 -->
-        <span class="count-list">{{todo.count || 0}}</span>
-        <!-- count:数量 绑定代办单项熟练-->
-      </h1>
-      <!-- 右边显示删除图标和锁定图标的模块 -->
-      <div class="nav-group right" v-show="!isUpdate">
-        <div class="options-web">
-          <a class=" nav-item" @click="onlock">
-            <!-- cicon-lock锁定的图标
-             icon-unlock：非锁定的图标
-             -->
-            <span class="icon-lock" v-if="todo.locked"></span>
-            <span class="icon-unlock" v-else>
-            </span>
-          </a>
-          <a class="nav-item">
-            <span class="icon-trash" @click="onDelete(todo.id)">
-            </span>
-          </a>
-        </div>
-      </div>
-      <!-- 用户新增代办事项的input模块 -->
-      <div class=" form todo-new input-symbol">
-        <!-- 绑定disabled值，当todo.locked为绑定的时候，禁止input输入,双向绑定text,和监听input的回车事件@keyup.enter -->
-        <input type="text" v-model="record" placeholder='请输入' @keyup.enter="onAdd" :disabled="todo.locked" />
-        <span class="icon-add"></span>
-      </div>
-    </nav>
-    <!-- 列表主体模块 -->
-    <div class="content-scrollable list-items">
-      <div v-for="(item,index) in items" v-bind:key="item.index">
-        <item :item="item" :index="index" :id="todo.id" :init="init" :locked="todo.locked"></item>
-      </div>
-    </div>
-  </div>
+  <section class="todoapp">
+    <header class="header">
+      <h1>云备忘录</h1>
+      <input
+        class="new-todo"
+        placeholder="接下来要做什么?"
+        autofocus
+        v-model="newTodo"
+        @keyup.enter="addTodo"
+      />
+    </header>
+    <section class="main" v-show="showTodos">
+      <input class="toggle-all" id="toggle-all" type="checkbox" v-model="allDone" />
+      <label for="toggle-all">一键全部完成</label>
+      <ul class="todo-list">
+        <li
+          v-for="(todoItem, index) in filteredTodos"
+          :key="'todo-' + index"
+          :class="{ completed: todoItem.completed, editing: todoItem === editedTodo}"
+        >
+          <div class="view">
+            <input class="toggle" type="checkbox" v-model="todoItem.completed" />
+            <label @dblclick="editTodo(todoItem)" v-cloak>{{ todoItem.record }}</label>
+            <button class="destroy" @click="removeTodo(todoItem)"></button>
+          </div>
+          <input
+            class="edit"
+            v-model="todoItem.record"
+            v-focus="todoItem === editedTodo"
+            @keyup.enter="doneEdit(todoItem)"
+            @keyup.esc="cancelEdit(todoItem)"
+            @blur="cancelEdit(todoItem)"
+          />
+        </li>
+      </ul>
+    </section>
+    <footer class="footer" v-show="showTodos">
+      <span class="todo-count">
+        <strong v-cloak>{{ activeCount }}</strong> 项未完成
+      </span>
+      <ul class="filters">
+        <li>
+          <a href="#/" :class="{ selected: visibility === 'all' }" @click="visibility='all'">全部</a>
+        </li>
+        <li>
+          <a
+            href="#/active"
+            :class="{ selected: visibility === 'active' }"
+            @click="visibility='active'"
+          >未完成</a>
+        </li>
+        <li>
+          <a
+            href="#/completed"
+            :class="{ selected: visibility === 'completed' }"
+            @click="visibility='completed'"
+          >已完成</a>
+        </li>
+      </ul>
+      <button class="clear-completed" @click="removeCompleted" v-show="completedCount">清空已完成</button>
+    </footer>
+  </section>
 </template>
-<script>
 
-import item from './item';
-import { addRecord, getTodo, editTodo ,deleteTodo} from '../api/api';
+<script>
+import { getTodo, editTodo } from "../api/api.js";
 
 export default {
+  name: "Todo",
   data() {
     return {
-      todo: {
-        title: '星期一', // 标题
-        count: 12, // 数量
-        locked: false // 是否绑定
-      },
-      items: [  // 代办单项列表
-      ],
-      record: '', // 用户输入单项项绑定的输入
-      isUpdate: false // 新增修改状态
+      newTodo: "",
+      id: null,
+      todoItems: [],
+      editedTodo: null,
+      beforeEditCache: "",
+      visibility: "all"
     };
   },
-  components: {
-    item
-  },
-  watch: {
-    '$route.params.id'() {
-      // 监听$route.params.id的变化，如果这个id即代表用户点击了其他的待办项需要重新请求数据。
-      this.init();
-    }
-  },
-  created() {
-    // created生命周期，在实例已经创建完成，页面还没渲染时调用init方法。
-    this.init();
-  },
-  methods: {
-    init() {
-      const ID = this.$route.params.id;
-      var _self=this;
-      getTodo({ id: ID }).then(res => {
-        let { id, title, count, locked, todoItems
-        } = res.data;
-        _self.items=todoItems;
-        _self.todo = {
-          id: id,
-          title: title,
-          count: count,
-          locked: locked
-        };
-      });
+  // 计算属性
+  computed: {
+    showTodos() {
+      return this.todoItems && this.todoItems.length > 0;
     },
-    onAdd() {
-      const ID = this.$route.params.id;
-      addRecord({ id: ID, record: this.record,checked:false }).then(res => {
-        this.record = '';
-        this.init();
-        this.$store.dispatch('getTodo');
-      });
-    },
-    updateTodo() {
-      let _this = this;
-      editTodo(this.todo).then(data => {
-        _this.$store.dispatch('getTodo');
-      });
-    },
-    updateTitle() {
-      this.updateTodo();
-      this.isUpdate = false;
-    },
-    onDelete(id) {
-      let _this = this;
-      deleteTodo(id).then(
-        data => {
-          _this.$store.dispatch('getTodo');
-        }
+    activeCount() {
+      return (
+        this.todoItems &&
+        this.todoItems.filter(todoItem => !todoItem.completed).length
       );
     },
-    onlock() {
-      this.todo.locked = !this.todo.locked;
-      this.updateTodo();
+    completedCount() {
+      return (
+        this.todoItems &&
+        this.todoItems.filter(todoItem => todoItem.completed).length
+      );
+    },
+    allDone: {
+      get() {
+        return this.activeCount === 0;
+      },
+      set(value) {
+        this.todoItems.map(todoItem => {
+          todoItem.completed = value;
+        });
+      }
+    },
+    filteredTodos() {
+      if (this.visibility == "all") {
+        return this.todoItems;
+      }
+      if (this.visibility == "active") {
+        return this.todoItems.filter(todoItem => !todoItem.completed);
+      }
+      if (this.visibility == "completed") {
+        return this.todoItems.filter(todoItem => todoItem.completed);
+      }
+    }
+  },
+  mounted() {
+    this.id = this.$route.params.id;
+    if (this.id != undefined) {
+      let _self = this;
+      getTodo(this.id).then(data => {
+        _self.todoItems = data.data.todoItems;
+      });
+      console.log(this.todoItems);
+    }
+  },
+  watch:{
+      todoItems:{
+          handler:'save',
+          deep:true,
+          immediate:false
+      }
+  },
+  // 方法集合
+  methods: {
+    save() {
+      let _self = this;
+      editTodo({ id: _self.id, todoItems: _self.todoItems }).then(data => {
+          _self.id = data;
+        });
+    },
+    addTodo() {
+      this.newTodo = this.newTodo.trim();
+      if (!this.newTodo) {
+        return;
+      }
+
+      this.todoItems.unshift({
+        record: this.newTodo,
+        completed: false
+      });
+      this.newTodo = "";
+    //   save();
+    },
+    removeTodo(todoItem) {
+      var index = this.todoItems.indexOf(todoItem);
+      this.todoItems.splice(index, 1);
+    //   save();
+    },
+    editTodo(todoItem) {
+      this.editedTodo = todoItem;
+      this.beforeEditCache = todoItem.record;
+    },
+    doneEdit(todoItem) {
+      if (!this.editedTodo) {
+        return;
+      }
+      this.editedTodo = null;
+      todoItem.record = todoItem.record.trim();
+      if (!todoItem.record) {
+        this.removeTodo(todoItem);
+      }
+    //   save();
+    },
+    cancelEdit(todoItem) {
+      if (this.editedTodo) {
+        todoItem.record = this.beforeEditCache;
+        this.editedTodo = null;
+      }
+    },
+    removeCompleted() {
+      this.todoItems = this.todoItems.filter(todoItem => !todoItem.completed);
+    //   save();
+    }
+  },
+  // 指令集合
+  directives: {
+    focus: {
+      update(el) {
+        el.focus();
+      }
     }
   }
 };
 </script>
 
-<style lang = "less">
-@import '../common/style/nav.less';
-@import '../common/style/form.less';
-@import '../common/style/todo.less';
+<style scoped>
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
+  background: #f5f5f5;
+  color: #4d4d4d;
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
+}
+
+:focus {
+  outline: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.todoapp {
+  background: #fff;
+  margin: 130px 0 40px 0;
+  position: relative;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.todoapp input::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp input::-moz-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp input::input-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp h1 {
+  position: absolute;
+  top: -200px;
+  width: 100%;
+  font-size: 100px;
+  font-weight: 100;
+  text-align: center;
+  color: rgba(175, 47, 47, 0.15);
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
+}
+
+.new-todo,
+.edit {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: 1.4em;
+  border: 0;
+  color: inherit;
+  padding: 6px;
+  border: 1px solid #999;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.new-todo {
+  padding: 16px 16px 16px 60px;
+  border: none;
+  background: rgba(0, 0, 0, 0.003);
+  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+}
+
+.main {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid #e6e6e6;
+}
+
+.toggle-all {
+  text-align: center;
+  border: none; /* Mobile Safari */
+  opacity: 0;
+  position: absolute;
+}
+
+.toggle-all + label {
+  width: 60px;
+  height: 34px;
+  font-size: 0;
+  position: absolute;
+  top: -52px;
+  left: -13px;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.toggle-all + label:before {
+  content: "❯";
+  font-size: 22px;
+  color: #e6e6e6;
+  padding: 10px 27px 10px 27px;
+}
+
+.toggle-all:checked + label:before {
+  color: #737373;
+}
+
+.todo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.todo-list li {
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+}
+
+.todo-list li:last-child {
+  border-bottom: none;
+}
+
+.todo-list li.editing {
+  border-bottom: none;
+  padding: 0;
+}
+
+.todo-list li.editing .edit {
+  display: block;
+  width: 506px;
+  padding: 12px 16px;
+  margin: 0 0 0 43px;
+}
+
+.todo-list li.editing .view {
+  display: none;
+}
+
+.todo-list li .toggle {
+  text-align: center;
+  width: 40px;
+  /* auto, since non-WebKit browsers doesn't support input styling */
+  height: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  border: none; /* Mobile Safari */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.todo-list li .toggle {
+  opacity: 0;
+}
+
+.todo-list li .toggle + label {
+  /*
+		Firefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433
+		IE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/
+	*/
+  background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.todo-list li .toggle:checked + label {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
+}
+
+.todo-list li label {
+  word-break: break-all;
+  padding: 15px 15px 15px 60px;
+  display: block;
+  line-height: 1.2;
+  transition: color 0.4s;
+}
+
+.todo-list li.completed label {
+  color: #d9d9d9;
+  text-decoration: line-through;
+}
+
+.todo-list li .destroy {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 0;
+  font-size: 30px;
+  color: #cc9a9a;
+  margin-bottom: 11px;
+  transition: color 0.2s ease-out;
+}
+
+.todo-list li .destroy:hover {
+  color: #af5b5e;
+}
+
+.todo-list li .destroy:after {
+  content: "×";
+}
+
+.todo-list li:hover .destroy {
+  display: block;
+}
+
+.todo-list li .edit {
+  display: none;
+}
+
+.todo-list li.editing:last-child {
+  margin-bottom: -1px;
+}
+
+.footer {
+  color: #777;
+  padding: 10px 15px;
+  height: 20px;
+  text-align: center;
+  border-top: 1px solid #e6e6e6;
+}
+
+.footer:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  overflow: hidden;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
+    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
+    0 17px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+.todo-count {
+  float: left;
+  text-align: left;
+}
+
+.todo-count strong {
+  font-weight: 300;
+}
+
+.filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+.filters li {
+  display: inline;
+}
+
+.filters li a {
+  color: inherit;
+  margin: 3px;
+  padding: 3px 7px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.filters li a:hover {
+  border-color: rgba(175, 47, 47, 0.1);
+}
+
+.filters li a.selected {
+  border-color: rgba(175, 47, 47, 0.2);
+}
+
+.clear-completed,
+html .clear-completed:active {
+  float: right;
+  position: relative;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.clear-completed:hover {
+  text-decoration: underline;
+}
+
+.info {
+  margin: 65px auto 0;
+  color: #bfbfbf;
+  font-size: 10px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.info p {
+  line-height: 1;
+}
+
+.info a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.info a:hover {
+  text-decoration: underline;
+}
+
+/*
+	Hack to remove background from Mobile Safari.
+	Can't use it globally since it destroys checkboxes in Firefox
+*/
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .toggle-all,
+  .todo-list li .toggle {
+    background: none;
+  }
+
+  .todo-list li .toggle {
+    height: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .footer {
+    height: 50px;
+  }
+
+  .filters {
+    bottom: 10px;
+  }
+}
+.help {
+  color: #333;
+  text-decoration: none;
+}
+[v-cloak] {
+  display: none !important;
+}
 </style>

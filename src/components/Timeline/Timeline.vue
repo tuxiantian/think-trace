@@ -1,30 +1,38 @@
 <template>
   <div style="margin:0 auto;width:400px">
-      <ul class="timeline" ref="timeline">
-        <li class="timeline-item" :style="itemStyle" v-for="item in items" v-bind:key="item.tag">
-          <div class="tag">{{item.tag}}</div>
-          <template v-if="item.active">
-            <div
-              class="timeline-circle"
-              style="border-color: #9dd8e0;background-color:#9dd8e0"
-              ref="others"
-            >
-              <slot name="others" />
-            </div>
-          </template>
-          <template v-else>
-            <div class="timeline-circle" ref="others">
-              <slot name="others" />
-            </div>
-          </template>
-          {{item.content}}
-          <slot />
-        </li>
-      </ul>
-    </div>
+    <ul class="timeline" ref="timeline">
+      <li
+        class="timeline-item"
+        :style="itemStyle"
+        v-for="item in items"
+        v-bind:key="item.timelineId"
+      >
+        <div class="tag">{{item.createDate}}</div>
+        <template v-if="item.active">
+          <div
+            class="timeline-circle"
+            style="border-color: #9dd8e0;background-color:#9dd8e0"
+            ref="others"
+          >
+            <slot name="others" />
+          </div>
+        </template>
+        <template v-else>
+          <div class="timeline-circle" ref="others">
+            <slot name="others" />
+          </div>
+        </template>
+        <router-link :to="'/todo/'+item.itemId">{{item.cardType}}</router-link>
+        <slot />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
+import { listTimelineItem } from "../../api/api";
+import { formatDate } from "@/utils/date";
+
 export default {
   name: "Timeline",
   props: {
@@ -87,7 +95,22 @@ export default {
     timeline.style.setProperty("--timelineBg", this.timelineBg);
     this.slotOthers = !!this.$refs.others.innerHTML;
   },
+  created() {
+    let now = formatDate(new Date(), "yyyy-MM-dd");
+    listTimelineItem({}).then(data => {
+      this.items = data;
+      this.items = this.items.map(item => {
+        return {
+          ...item,
+          createDate: item.createTime.split("T")[0],
+          active: now == item.createTime.split("T")[0]
+        };
+      });
 
+      console.log(this.items);
+      console.log(formatDate(new Date(), "yyyy-MM-dd"));
+    });
+  },
   computed: {
     circleStyle() {
       if (!this.lineColor && !this.iconSize) return;

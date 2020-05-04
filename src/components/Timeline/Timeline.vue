@@ -47,7 +47,7 @@
             </template>
             <template v-else-if="timelineItem.cardType=='article'">
               <router-link
-                :to="'/markdown/view/'+timelineItem.itemId"
+                :to="'/article/view/'+timelineItem.itemId"
               >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
             </template>
           </li>

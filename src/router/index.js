@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import Timeline from '@/components/Timeline/Timeline.vue'
 import Todo from '@/components/Todo';
 import Article from '@/components/Article';
-import Viewer from '@/components/Viewer';
+import ArticleViewer from '@/components/ArticleViewer';
 import TwoDimensionTable from '@/components/TwoDimensionTable';
 import FactOpinionCard from '@/components/FactOpinionCard';
 import WhyHowWhatCard from '@/components/WhyHowWhatCard';
@@ -44,9 +44,9 @@ export default new Router({
       component: Article
     },
     {
-      path:'/markdown/view/:id',
-      name: 'Viewer',
-      component: Viewer
+      path:'/article/view/:id',
+      name: 'ArticleViewer',
+      component: ArticleViewer
     },
     {
       path:'/twoDimensionTable',

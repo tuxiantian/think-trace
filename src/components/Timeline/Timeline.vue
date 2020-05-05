@@ -20,40 +20,41 @@
         </template>
         <ul class="one-day">
           <li v-for="timelineItem in item.timelineItems" v-bind:key="timelineItem.timelineId">
+            {{timelineItem.createTime.split("T")[1]}}
             <template v-if="timelineItem.cardType=='todoList'">
               <router-link
                 :to="'/todo/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              > {{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='factOpinion'">
               <router-link
                 :to="'/factOpinionCard/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              >{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='whyHowWhat'">
               <router-link
                 :to="'/whyHowWhatCard/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              >{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='twoDimensionTable'">
               <router-link
                 :to="'/twoDimensionTable/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              > {{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='preferenceRank'">
               <router-link
                 :to="'/preferenceRankView/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              > {{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='article'">
               <router-link
                 :to="'/article/view/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              > {{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='imageGallery'">
               <router-link
                 :to="'/imageGallery/'+timelineItem.itemId"
-              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+              > {{timelineItem.cardType}}</router-link>
             </template>
           </li>
         </ul>

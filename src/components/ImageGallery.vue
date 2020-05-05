@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="image-gallery">
     <el-upload
       action="http://localhost:8085/file/save?bussType=imageGallery"
       list-type="picture-card"
@@ -44,3 +44,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.image-gallery{
+    width: 750px;
+    margin: 0 auto;
+}
+</style>

@@ -50,6 +50,11 @@
                 :to="'/article/view/'+timelineItem.itemId"
               >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
             </template>
+            <template v-else-if="timelineItem.cardType=='imageGallery'">
+              <router-link
+                :to="'/imageGallery/'+timelineItem.itemId"
+              >{{timelineItem.createTime.split("T")[1]}} {{timelineItem.cardType}}</router-link>
+            </template>
           </li>
         </ul>
 

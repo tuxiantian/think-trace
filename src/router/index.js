@@ -10,6 +10,8 @@ import WhyHowWhatCard from '@/components/WhyHowWhatCard';
 import PreferenceRank from '@/components/PreferenceRank';
 import PreferenceRankView from '@/components/PreferenceRankView';
 import Preference from '@/components/Preference';
+import ImageGallery from '@/components/ImageGallery';
+import ImageGalleryView from '@/components/ImageGalleryView';
 
 
 Vue.use(Router);
@@ -97,6 +99,14 @@ export default new Router({
       path:'/preference/:id',
       name: 'PreferenceView',
       component: Preference
+    },{
+      path:'/imageGallery',
+      name:'ImageGallery',
+      component:ImageGallery
+    },{
+      path:'/imageGallery/:id',
+      name:'ImageGalleryView',
+      component:ImageGalleryView
     }
     
   ]

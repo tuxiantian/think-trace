@@ -11,6 +11,7 @@
           <router-link to="/factOpinionCard">FactOpinionCard</router-link>
           <router-link to="/whyHowWhatCard">WhyHowWhatCard</router-link>
           <router-link to="/preference">Preference</router-link>
+          <router-link to="/imageGallery">ImageGallery</router-link>
         </li>
       </ul>
     </el-header>

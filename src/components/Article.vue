@@ -1,5 +1,5 @@
 <template>
-  <div class="components-container">
+  <div class="article-container">
     <el-input type="hidden" v-model="id"></el-input>
     <el-input v-model="title" placeholder="请输入文章标题" clearable maxlength="100"></el-input>
     <div class="editor-container" style="margin-top:10px">
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style scoped>
+.article-container{
+  width: 1000px;
+  margin: 0 auto;
+}
 .editor-container {
   margin-bottom: 30px;
 }

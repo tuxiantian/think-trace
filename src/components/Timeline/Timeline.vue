@@ -50,6 +50,9 @@
               <router-link
                 :to="'/article/view/'+timelineItem.itemId"
               > {{timelineItem.cardType}}</router-link>
+              <router-link
+                :to="'/article/'+timelineItem.itemId"
+              > edit</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='imageGallery'">
               <router-link

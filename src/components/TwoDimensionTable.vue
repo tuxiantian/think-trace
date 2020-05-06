@@ -3,8 +3,9 @@
     <div class="vertical">
       <div class="second-quadrant" id="second" contenteditable="true"></div>
       <span class="vertical-tag">
-        <i class="el-icon-top"></i>紧急
+        <i class="el-icon-top"></i>
       </span>
+      <input v-model="ylable" />
     </div>
 
     <div contenteditable="true" id="first"></div>
@@ -12,7 +13,8 @@
     <div class="horizontal">
       <div class="four-quadrant" contenteditable="true" id="forth"></div>
       <span class="horizontal-tag">
-        <i class="el-icon-right"></i>重要
+        <i class="el-icon-right"></i>
+        <input v-model="xlable" />
       </span>
     </div>
 
@@ -27,7 +29,9 @@ export default {
   name: "TwoDimensionTable",
   data() {
     return {
-      id: null
+      id: null,
+      xlable: "重要",
+      ylable: "紧急"
     };
   },
   created() {},
@@ -39,17 +43,22 @@ export default {
         document.getElementById("first").innerText = data.first;
         document.getElementById("third").innerText = data.third;
         document.getElementById("forth").innerText = data.forth;
+        this.xlable = data.xlable;
+        this.ylable = data.ylable;
       });
     }
   },
   methods: {
     onSubmit() {
+      debugger
       editTwoDimensionTable({
         id: this.id,
         second: document.getElementById("second").innerText,
         first: document.getElementById("first").innerText,
         third: document.getElementById("third").innerText,
-        forth: document.getElementById("forth").innerText
+        forth: document.getElementById("forth").innerText,
+        xlable:this.xlable,
+        ylable:this.ylable
       }).then(res => {
         if (res.code == 200) {
           this.$message({
@@ -71,16 +80,28 @@ export default {
 }
 .vertical-tag {
   position: absolute;
-  top: -16px;
-  right: -39px;
+  top: -9px;
+  right: -7px;
 }
 .horizontal {
   position: relative;
 }
 .horizontal-tag {
   position: absolute;
-  right: -46px;
-  top: -9px;
+  right: -190px;
+  top: -10px;
+}
+.horizontal-tag input {
+  border: none;
+  outline: none;
+}
+.vertical-tag + input {
+  border: none;
+  outline: none;
+  position: absolute;
+  top: -30px;
+  right: -80px;
+  text-align: center;
 }
 .two-dimension-table {
   display: flex;
@@ -89,13 +110,14 @@ export default {
   align-items: center;
   justify-content: start;
   width: 821px;
-  margin: 0 auto;
+  margin: 50px auto 0 auto;
 }
 .two-dimension-table div[contenteditable="true"] {
   width: 400px;
   height: 200px;
   overflow: auto;
   padding: 10px 5px;
+  text-align: left;
 }
 .two-dimension-table div[contenteditable="true"]:focus {
   outline: none;

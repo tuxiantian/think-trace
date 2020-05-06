@@ -1,5 +1,9 @@
 <template>
-  <div style="margin:0 auto;width:400px">
+  <div
+    style="margin:0 auto;width:400px"
+    v-infinite-scroll="load"
+    infinite-scroll-disabled="disabled"
+  >
     <ul class="timeline" ref="timeline">
       <li
         class="timeline-item"
@@ -21,43 +25,31 @@
         <ul class="one-day">
           <li v-for="timelineItem in item.timelineItems" v-bind:key="timelineItem.timelineId">
             {{timelineItem.createTime.split("T")[1]}}
-            <template v-if="timelineItem.cardType=='todoList'">
-              <router-link
-                :to="'/todo/'+timelineItem.itemId"
-              > {{timelineItem.cardType}}</router-link>
+            <template
+              v-if="timelineItem.cardType=='todoList'"
+            >
+              <router-link :to="'/todo/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='factOpinion'">
-              <router-link
-                :to="'/factOpinionCard/'+timelineItem.itemId"
-              >{{timelineItem.cardType}}</router-link>
+              <router-link :to="'/factOpinionCard/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='whyHowWhat'">
-              <router-link
-                :to="'/whyHowWhatCard/'+timelineItem.itemId"
-              >{{timelineItem.cardType}}</router-link>
+              <router-link :to="'/whyHowWhatCard/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='twoDimensionTable'">
-              <router-link
-                :to="'/twoDimensionTable/'+timelineItem.itemId"
-              > {{timelineItem.cardType}}</router-link>
+              <router-link :to="'/twoDimensionTable/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='preferenceRank'">
               <router-link
                 :to="'/preferenceRankView/'+timelineItem.itemId"
-              > {{timelineItem.cardType}}</router-link>
+              >{{timelineItem.cardType}}</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='article'">
-              <router-link
-                :to="'/article/view/'+timelineItem.itemId"
-              > {{timelineItem.cardType}}</router-link>
-              <router-link
-                :to="'/article/'+timelineItem.itemId"
-              > edit</router-link>
+              <router-link :to="'/article/view/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
+              <router-link :to="'/article/'+timelineItem.itemId">edit</router-link>
             </template>
             <template v-else-if="timelineItem.cardType=='imageGallery'">
-              <router-link
-                :to="'/imageGallery/'+timelineItem.itemId"
-              > {{timelineItem.cardType}}</router-link>
+              <router-link :to="'/imageGallery/'+timelineItem.itemId">{{timelineItem.cardType}}</router-link>
             </template>
           </li>
         </ul>
@@ -65,11 +57,15 @@
         <slot />
       </li>
     </ul>
+    <p v-if="loading" style="margin-top:10px;" class="loading">
+      <span></span>
+    </p>
+    <p v-if="noMore" style="margin-top:10px;font-size:13px;color:#ccc">没有更多了</p>
   </div>
 </template>
 
 <script>
-import { listTimelineItem } from "../../api/api";
+import { pageTimelineItem } from "../../api/api";
 import { formatDate } from "@/utils/date";
 
 export default {
@@ -120,7 +116,10 @@ export default {
           width: "30px"
         }
       },
-      items: []
+      items: [], //后端返回的数组
+      pageNo: 1, //起始页数值为0
+      loading: false,
+      pageCount: "" //取后端返回内容的总页数
     };
   },
 
@@ -130,10 +129,7 @@ export default {
     timeline.style.setProperty("--timelineBg", this.timelineBg);
   },
   created() {
-    listTimelineItem({}).then(data => {
-      this.items = data;
-      console.log(this.items);
-    });
+    this.getData();
   },
   computed: {
     circleStyle() {
@@ -153,6 +149,30 @@ export default {
       return {
         color: this.fontColor
       };
+    },
+    noMore() {
+      //当起始页数大于总页数时停止加载
+      return this.pageNo > this.pageCount;
+    },
+    disabled() {
+      return this.loading || this.noMore;
+    }
+  },
+  methods: {
+    load() {
+      //滑到底部时进行加载
+      this.loading = true;
+      setTimeout(() => {
+        this.pageNo += 1; //页数+1
+        this.getData(); //调用接口，此时页数+1，查询下一页数据
+      }, 2000);
+    },
+    getData() {
+      pageTimelineItem({ pageNo: this.count, pageSize: 10 }).then(res => {
+        this.items = res.data;
+        this.pageCount = res.pageCount;
+        console.log(this.items);
+      });
     }
   }
 };
@@ -240,11 +260,29 @@ export default {
   border: none;
   background-color: var(--timelineBg);
 }
-.one-day{
+.one-day {
   list-style: none;
 }
-.one-day li{
+.one-day li {
   line-height: 30px;
   height: 30px;
+}
+
+.loading span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #409eff;
+  border-left: transparent;
+  animation: zhuan 0.5s linear infinite;
+  border-radius: 50%;
+}
+@keyframes zhuan {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

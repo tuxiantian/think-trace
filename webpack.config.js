@@ -101,12 +101,39 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    proxy: {
+      '/api/*': {
+          target: 'http://localhost:9090',
+          secure: false
+      }
+    }
+
   },
   performance: {
     hints: false
   },
   devtool: '#eval-source-map'
+}
+
+if(process.env.NODE_ENV === 'development'){
+  module.exports.plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BASE_API: '"http://localhost:8085"'
+      }
+    })
+  ]
+}
+
+if(process.env.NODE_ENV === 'mock'){
+  module.exports.plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BASE_API: '""'
+      }
+    })
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {

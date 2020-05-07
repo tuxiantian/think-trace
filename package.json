@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "mock": "cross-env NODE_ENV=mock webpack-dev-server --open --hot"
   },
   "dependencies": {
     "@toast-ui/editor": "^2.1.0-alpha.0",
@@ -17,6 +18,7 @@
     "axios": "^0.19.2",
     "codemirror": "^5.53.2",
     "element-ui": "^2.13.1",
+    "json-server": "^0.16.1",
     "less": "^3.11.1",
     "normalize.css": "^8.0.1",
     "underscore": "^1.10.2",

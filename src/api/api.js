@@ -1,9 +1,39 @@
 import axios from 'axios';
+import { getToken } from '@/utils/auth'
+import store from '../store'
 
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 15000 // 请求超时时间
 })
+
+// request拦截器
+service.interceptors.request.use(config => {
+  if (store.getters.token) {
+    config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  }
+  return config
+}, error => {
+  // Do something with request error
+  console.log(error) // for debug
+  Promise.reject(error)
+})
+
+export const register = params => {
+  return service.post(`/api/user/register`, params).then(res => res.data);
+};
+
+export const login = params => {
+  return service.post(`/api/user/login`, params).then(res => res.data);
+};
+
+export const getInfo = params => {
+  return service.get(`/api/user/info`, params).then(res => res.data);
+};
+
+export const logout = params => {
+  return service.post(`/api/user/logout`, params).then(res => res.data);
+};
 
 export const getTodoList = params => {
   return service.get(`/api/todo/list`, {

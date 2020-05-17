@@ -12,6 +12,8 @@ import PreferenceRankView from '@/components/PreferenceRankView';
 import Preference from '@/components/Preference';
 import ImageGallery from '@/components/ImageGallery';
 import ImageGalleryView from '@/components/ImageGalleryView';
+import Register from '@/components/Register';
+import Login from '@/components/Login';
 
 
 Vue.use(Router);
@@ -107,6 +109,14 @@ export default new Router({
       path:'/imageGallery/:id',
       name:'ImageGalleryView',
       component:ImageGalleryView
+    },{
+      path:'/register',
+      name:'Register',
+      component:Register
+    },{
+      path:'/login',
+      name:'Login',
+      component:Login
     }
     
   ]

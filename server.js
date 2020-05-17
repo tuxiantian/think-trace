@@ -10,6 +10,7 @@ const db = require('./db.js')
  console.log(db.api_timelineItem_page)
 
 server.use(jsonServer.rewriter({
+    '/api/diary/page': '/api_diary_page',
     '/api/timelineItem/page': '/api_timelineItem_page',
     '/api/preference/sorted/3':'/api_preference_sorted_3',
     '/api/whyHowWhatCard/get/2':'/api_whyHowWhatCard_get_2',

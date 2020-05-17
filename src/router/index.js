@@ -14,6 +14,9 @@ import ImageGallery from '@/components/ImageGallery';
 import ImageGalleryView from '@/components/ImageGalleryView';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
+import Diary from '@/components/Diary';
+import DiaryTimeline from '@/components/DiaryTimeline';
+
 
 
 Vue.use(Router);
@@ -117,6 +120,18 @@ export default new Router({
       path:'/login',
       name:'Login',
       component:Login
+    },{
+      path:'/diary',
+      name:'Diary',
+      component:Diary
+    },{
+      path:'/diary/:id',
+      name:'DiaryView',
+      component:Diary
+    },{
+      path:'/diaryTimeline',
+      name:'DiaryTimeline',
+      component:DiaryTimeline
     }
     
   ]

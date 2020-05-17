@@ -139,3 +139,15 @@ export const removeImageGallery = params => {
 export const getImageGallery = id => {
   return service.get(`/api/imageGallery/get/${id}`).then(res => res.data);
 }
+
+export const editDiary = params => {
+  return service.post(`/api/diary/edit`, params).then(res => res.data);
+}
+
+export const getDiary = id => {
+  return service.get(`/api/diary/get/${id}`).then(res => res.data);
+}
+
+export const pageDiary = params => {
+  return service.get(`/api/diary/page`, params).then(res => res.data);
+}

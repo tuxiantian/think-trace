@@ -1,4 +1,5 @@
 module.exports = {
+    'api_diary_page':require('./data/api_diary_page.json'),
     'api_timelineItem_page':require('./data/api_timelineItem_page.json'),
     'api_preference_sorted_3':require('./data/api_preference_sorted_3.json'),
     'api_whyHowWhatCard_get_2':require('./data/api_whyHowWhatCard_get_2.json'),

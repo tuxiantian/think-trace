@@ -12,6 +12,8 @@
           <router-link to="/whyHowWhatCard">WhyHowWhatCard</router-link>
           <router-link to="/preference">Preference</router-link>
           <router-link to="/imageGallery">ImageGallery</router-link>
+          <router-link to="/diary">Diary</router-link>
+          <router-link to="/diaryTimeline">DiaryTimeline</router-link>
         </li>
       </ul>
     </el-header>

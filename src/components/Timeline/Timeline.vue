@@ -168,7 +168,7 @@ export default {
       }, 2000);
     },
     getData() {
-      pageTimelineItem({ pageNo: this.count, pageSize: 10 }).then(res => {
+      pageTimelineItem({ pageNo: this.pageNo, pageSize: 10 }).then(res => {
         this.items = res.data;
         this.pageCount = res.pageCount;
         console.log(this.items);

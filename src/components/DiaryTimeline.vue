@@ -11,7 +11,7 @@
         v-for="item in items"
         v-bind:key="item.createDate"
       >
-        <div class="tag">{{item.createTime}}</div>
+        
         <template v-if="item.active">
           <div
             class="timeline-circle"
@@ -24,7 +24,7 @@
         </template>
 
         <div v-html="item.contentHtml" class="diary-content"></div>
-
+        <div class="tag">{{item.createTime}}</div>
       </li>
     </ul>
     <p v-if="loading" style="margin-top:10px;" class="loading">
@@ -136,9 +136,10 @@ export default {
       }, 2000);
     },
     getData() {
-      pageDiary({ pagenumber: this.count, pagesize: 10 }).then(res => {
+      pageDiary({ pagenumber: this.pageNo, pagesize: 10 }).then(res => {
         this.items = res.content;
         this.pageCount = res.totalPages;
+        console.log(this.items)
       });
     }
   }
@@ -146,10 +147,6 @@ export default {
 </script>
 
 <style>
-.tag {
-  position: absolute;
-  left: -72%;
-}
 .timeline {
   padding: 0;
   position: relative;

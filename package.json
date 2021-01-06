@@ -15,7 +15,7 @@
     "@toast-ui/editor-plugin-chart": "^1.0.0",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^1.0.0",
     "@toast-ui/editor-plugin-table-merged-cell": "^1.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "codemirror": "^5.53.2",
     "element-ui": "^2.13.1",
     "js-cookie": "^2.2.1",
